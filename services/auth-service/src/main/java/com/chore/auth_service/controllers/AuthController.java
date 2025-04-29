@@ -1,4 +1,4 @@
-package com.chore.auth_service.controller;
+package com.chore.auth_service.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
