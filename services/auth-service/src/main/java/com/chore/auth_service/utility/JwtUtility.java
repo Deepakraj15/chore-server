@@ -1,4 +1,4 @@
-package com.chore.auth_service.utilities;
+package com.chore.auth_service.utility;
 
 import java.util.Date;
 
