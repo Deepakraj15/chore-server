@@ -1,1 +1,59 @@
+version: '3.8'
 services:
+  redis:
+    image: redis
+    container_name: redis
+    networks:
+      - app_network
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: chore@123
+    networks:
+      - app_network
+
+  discovery-service:
+    build:
+      context: ./discovery-service
+      dockerfile: Dockerfile
+    container_name: discovery-service
+    ports:
+      - "8761:8761"
+    networks:
+      - app_network
+    depends_on:
+      - redis
+      - postgres
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "8081:8081"
+    networks:
+      - app_network
+    depends_on:
+      - redis
+      - postgres
+  
+  auth-service:
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    container_name: auth-service
+    ports:
+      - "8082:8082"
+    networks:
+      - app_network
+    depends_on:
+      - redis
+      - postgres
+
+networks:
+  app_network:
+    driver: bridge
