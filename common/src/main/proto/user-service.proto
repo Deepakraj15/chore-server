@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.chore.common";
+option java_outer_classname = "UserServiceProto";
+option objc_class_prefix = "USR";
+
+package userservice;
+
+// User Service to manage users.
+service UserService {
+  // Checks if a username and password are valid.
+  rpc CheckCredentials(CredentialsRequest) returns (CredentialsResponse);
+}
+
+// The request containing the username and password to check.
+message CredentialsRequest {
+  string username = 1;
+  string password = 2;
+}
+
+// The response indicating whether the credentials are valid.
+message CredentialsResponse {
+  bool is_valid = 1; // Whether the credentials are valid.
+  string message = 2; // Additional message (e.g. "Invalid username" or "Invalid password").
+}

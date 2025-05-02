@@ -1,8 +1,8 @@
-package com.chore.auth_service.pojo.request;
+package com.chore.common.pojo.request;
 import lombok.Data;
 
 @Data
-public class AuthRequest {
+public class AuthTokenRequest {
     private String username;
     private String password;
 }
