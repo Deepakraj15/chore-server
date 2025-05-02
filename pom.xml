@@ -12,6 +12,7 @@
     <module>discovery-service</module>
     <module>api-gateway</module>
     <module>services/auth-service</module>
+    <module>services/user-service</module>
   </modules>
 
   <dependencyManagement>
@@ -63,6 +64,9 @@
                   <include name="*.jar"/>
                 </fileset>
                 <fileset dir="${project.basedir}/services/auth-service/target">
+                  <include name="*.jar"/>
+                </fileset>
+                 <fileset dir="${project.basedir}/services/user-service/target">
                   <include name="*.jar"/>
                 </fileset>
               </copy>
