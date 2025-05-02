@@ -12,6 +12,9 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: chore@123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app_network
 
@@ -54,6 +57,22 @@ services:
       - redis
       - postgres
 
+  user-service:
+    build:
+      context: ./services/user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "8083:8083"
+    networks:
+      - app_network
+    depends_on:
+      - redis
+      - postgres
+
 networks:
   app_network:
     driver: bridge
+
+volumes:
+  postgres_data:
