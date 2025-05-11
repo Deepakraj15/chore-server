@@ -30,6 +30,7 @@ public class WebClientService {
             .block(); 
 
         // Check if the response status code is OK (200)
-        return response.statusCode() == HttpStatus.OK;
+        return response != null && response.statusCode() == HttpStatus.OK;
     }
+
 }

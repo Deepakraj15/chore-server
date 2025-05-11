@@ -26,6 +26,7 @@ public class AuthController {
     public ResponseEntity<AuthResponse> getAuthToken(@RequestBody AuthRequest authRequest) {
         return ResponseEntity.ok(authService.generateAuthTokenAndRefreshToken(authRequest));
     }
+    
     @GetMapping("/getStatus")
     public String getStatus() {
         return "Status is up";

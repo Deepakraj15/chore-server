@@ -1,5 +1,7 @@
 package com.chore.user_service.service;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,14 +13,11 @@ public class UserService {
     
   private final PasswordService passwordService;
     private final UserRepository userRepository;
-    private final BloomUserService bloomUserService;
 
     public UserService(PasswordService passwordService,
-                       UserRepository userRepository,
-                       BloomUserService bloomUserService) {
+                       UserRepository userRepository) {
         this.passwordService = passwordService;
         this.userRepository = userRepository;
-        this.bloomUserService = bloomUserService;
     }
 
     public boolean validateUser(String username, String password) {
@@ -29,14 +28,34 @@ public class UserService {
     
     @Transactional
     public boolean createUser(String username, String password) {
-        User user = userRepository.findByUsername(username);
-        if (user != null) {
+        try {
+            if (isUserPresent(username)) {
+                return false;
+            }
+            User user = new User();
+            user.setUserId(generateUniqueUserId());
+            user.setUsername(username);
+            user.setPassword(passwordService.hashPassword(password));
+            user.setCreatedAt(String.valueOf(System.currentTimeMillis()));
             userRepository.save(user);
             return true;
+        } catch (Exception e) {
+            // error log
+            return false;
         }
-        return false; // if user already exists, return false
     }
-    public boolean checkUserNameAvailability(String username) {
-        return bloomUserService.mightContainUser(username);
+
+    public boolean isUserPresent(String username) {
+        return userRepository.findByUsername(username) != null;
     }
+
+
+    private String generateUniqueUserId() {
+    String userId;
+    do {
+        userId = UUID.randomUUID().toString();  // Generate a UUID
+    } while (userRepository.existsById(userId));  
+    
+    return userId;
+}
 }

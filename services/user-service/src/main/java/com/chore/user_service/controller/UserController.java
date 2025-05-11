@@ -24,30 +24,21 @@ public class UserController {
             @RequestParam String password) {
         boolean exists = userService.validateUser(username, password);
         if (exists) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(200).build();
         } else {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(204).build();
         }
     }
     
     @PostMapping("/createUser")
     public ResponseEntity<String> createNewUser(@RequestHeader String username, @RequestHeader String password) {
-        if(!userService.createUser(username, password)) // if user exist
-        {
-            return ResponseEntity.ok().body("User already exists");
-        }
-        return ResponseEntity.ok().body("User created successfully");
+       if (userService.createUser(username, password)) {
+        return ResponseEntity.status(201).build(); 
+    } else {
+        return ResponseEntity.status(409).build();
+    }
     }
     
-    @GetMapping("/checkUserNameAvailability")
-    public ResponseEntity<Object> checkUserNameAvailability(@RequestParam String username) {
-        boolean exists = userService.checkUserNameAvailability(username);
-        if (exists) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.noContent().build();
-        }
-    }
     
 }
     
